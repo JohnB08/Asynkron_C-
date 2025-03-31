@@ -31,11 +31,11 @@ static void WriteNewThread()
 
 //Det er en executionpath som kjører uavhenging av de andre vi har, så dette er IKKE det samme som conditional branching.
 
-AsyncronCounter.CountWithThreads();
+AsyncronCounter.CountTwoThreads();
 
 
 //Vi kan nå waite for resultatet av vår task completion source method.
-AsyncronCounter.CountWithTaskCompletionSource().Wait();
+AsyncronCounter.CountTwoTasks().Wait();
 
 //Vi kan her også awaite vår CountWithAsyncAwait.
 await AsyncronCounter.CountWithAsyncAwait();

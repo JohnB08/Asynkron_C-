@@ -9,7 +9,7 @@ public static class AsyncronCounter
     /// aka, vi venter til operasjonen på worker threadene våre er ferdig,
     /// før vi fletter de inn i main threaden igjen.
     /// </summary>
-    public static void CountWithThreads()
+    public static void CountTwoThreads()
     {
         //Vi setter først opp en counter, og en thread som skal jobbe med denne counteren.
         Console.WriteLine("Couting with regular Threads...");
@@ -82,7 +82,7 @@ public static class AsyncronCounter
     /// fra taskene vi setter opp. 
     /// </summary>
     /// <returns></returns>
-    public static Task CountWithTaskCompletionSource()
+    public static Task CountTwoTasks()
     {
         Console.WriteLine("Starting Counters on ThreadPool with TaskCompletionSources and Signals...");
 
@@ -166,7 +166,7 @@ public static class AsyncronCounter
         int currentCount = 0; //vi starter på posisjon 0.
 
 
-        void countContinuation()
+        void CountContinuation()
         {
             try
             {
@@ -185,7 +185,7 @@ public static class AsyncronCounter
                         currentCount++;
                         
                         //og triggrer countContinuation på nytt via recrusjon.
-                        countContinuation();
+                        CountContinuation();
                     });
                 }
                 else
@@ -204,7 +204,7 @@ public static class AsyncronCounter
         }
 
         //Vi starter prosessen.
-        countContinuation();
+        CountContinuation();
     }
 
     //Heldigvis for oss, det å sette opp Threadpools, Awaiters osv er ganske mye boilerplate.
