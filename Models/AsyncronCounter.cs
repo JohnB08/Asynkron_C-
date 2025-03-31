@@ -130,7 +130,7 @@ public static class AsyncronCounter
         var tsc = new TaskCompletionSource<bool>();
 
         //Vi setter opp en action som vi kan levere til vår ThreadPool.
-        ThreadPool.QueueUserWorkItem(_=>
+        Task.Run(()=>
         {
             try
             {
