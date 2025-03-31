@@ -166,11 +166,9 @@ public static class AsyncronCounter
         int currentCount = 0; //vi starter på posisjon 0.
 
 
-        Action? countContinuation = null;
-        //Vi setter opp en action som representerer vår counting loop.
-        countContinuation = () =>
+        void countContinuation()
         {
-            try 
+            try
             {
                 if (currentCount <= model.MaxCount)
                 {
@@ -180,12 +178,14 @@ public static class AsyncronCounter
                     var awaiter = delayTask.GetAwaiter();
 
                     //Vi kan så hente ut, og vente på at delayet er ferdig. Før vi setter opp en ny action som skal kjøres når delayTask er ferdig.
-                    awaiter.OnCompleted(()=>{
+                    awaiter.OnCompleted(() =>
+                    {
                         Console.WriteLine($"Task {model.Name} resuming after delay...");
                         //Vi incrementer currentCount
                         currentCount++;
+                        
                         //og triggrer countContinuation på nytt via recrusjon.
-                        countContinuation!();
+                        countContinuation();
                     });
                 }
                 else
@@ -201,7 +201,7 @@ public static class AsyncronCounter
                 Console.WriteLine($"Task {model.Name} encountered");
                 tsc.SetException(ex);
             }
-        };
+        }
 
         //Vi starter prosessen.
         countContinuation();
