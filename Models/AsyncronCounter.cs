@@ -127,7 +127,7 @@ public static class AsyncronCounter
     {
 
         //Vi setter opp en TaskCompletionSource som representerer når Counteren er ferdig å opperere.
-        var tsc = new TaskCompletionSource<bool>();
+        var tsc = new TaskCompletionSource();
 
         //Vi setter opp en action som vi kan levere til vår ThreadPool.
         Task.Run(()=>
@@ -161,7 +161,7 @@ public static class AsyncronCounter
     /// </summary>
     /// <param name="model"></param>
     /// <param name="tsc"></param>
-    private static void CountWithTaskAwaiter(CounterModel model, TaskCompletionSource<bool> tsc)
+    private static void CountWithTaskAwaiter(CounterModel model, TaskCompletionSource tsc)
     {
         int currentCount = 0; //vi starter på posisjon 0.
 
@@ -175,9 +175,9 @@ public static class AsyncronCounter
                     //vi setter opp en task som skal pause execution. 
                     var delayTask = Task.Delay(model.DelayMs);
                     Console.WriteLine($"Task {model.Name} has counted {currentCount} / {model.MaxCount}...");
-                    var awaiter = delayTask.GetAwaiter();
-
+                    
                     //Vi kan så hente ut, og vente på at delayet er ferdig. Før vi setter opp en ny action som skal kjøres når delayTask er ferdig.
+                    var awaiter = delayTask.GetAwaiter();
                     awaiter.OnCompleted(() =>
                     {
                         Console.WriteLine($"Task {model.Name} resuming after delay...");
@@ -192,7 +192,7 @@ public static class AsyncronCounter
                 {
                     //Loopen er ferdig, og vi kan raportere dette til brukeren og til taskcompletionsource.
                     Console.WriteLine($"Task {model.Name} has completed the count...");
-                    tsc.SetResult(true);
+                    tsc.SetResult();
                 }
             }
             catch (Exception ex)
